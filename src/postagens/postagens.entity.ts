@@ -34,15 +34,15 @@ export class Postagem {
     })
     data_atualizacao: Date;
 
-    @Column({ default: 0 })  // Campo para o contador de curtidas
+    @Column({ default: 0 })
     likesCount: number;
 
     @OneToMany(() => Like, like => like.postagem)
     likes: Like[];  
 
     @Column({ nullable: true })
-    slug: string; //armazena slug
+    slug: string; 
     @OneToMany(() => Comentario, (comentario) => comentario.postagem)
-    comentarios: Comentario[]; // Relacionamento com os Comentarios
+    comentarios: Comentario[]; 
 
 }

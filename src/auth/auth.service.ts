@@ -13,8 +13,8 @@ export class AuthService {
     name: string,
     email: string,
     password: string
-  ): Promise<{ access_token: string, user_id: number }> { // Alterando o tipo de retorno
-    const user = await this.usersService.findOne(email);
+  ): Promise<{ access_token: string, user_id: number }> { 
+    const user = await this.usersService.findOneByEmail(email);
     if ((user?.password !== password) || (user?.email !== email)) {
       throw new UnauthorizedException();
     }
@@ -22,10 +22,9 @@ export class AuthService {
 
     const access_token = await this.jwtService.signAsync(payload);
 
-    // Retornando o token junto com o user_id
     return {
       access_token,
-      user_id: user.id, // Aqui o id do usuário é incluído no retorno
+      user_id: user.id,
     };
   }
 }

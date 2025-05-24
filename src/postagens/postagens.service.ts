@@ -20,7 +20,7 @@ export class PostagensService {
     findOne(id: number) {
         return this.postagemRepository.findOne({
             where: { id },
-            relations: ['likes'], // Carrega os likes para obter a contagem
+            relations: ['likes'],
         });
     }
 
