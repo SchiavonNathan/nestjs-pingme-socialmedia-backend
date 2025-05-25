@@ -18,7 +18,7 @@ export class Postagem {
     @Column("text")
     conteudo: string;
 
-    @Column()
+    @Column({ nullable: true })
     foto: string;
 
     @Column({ length: 255, nullable: true })
@@ -42,6 +42,7 @@ export class Postagem {
 
     @Column({ nullable: true })
     slug: string; 
+    
     @OneToMany(() => Comentario, (comentario) => comentario.postagem)
     comentarios: Comentario[]; 
 

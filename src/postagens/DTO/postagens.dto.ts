@@ -1,6 +1,8 @@
 import { IsNotEmpty, IsOptional, IsString, MaxLength, IsInt } from "class-validator";
+import { User } from "src/users/users.entity";
 
 export class PostagemDTO {
+    
     @IsNotEmpty()
     @IsString()
     @MaxLength(255)
@@ -15,6 +17,11 @@ export class PostagemDTO {
     @MaxLength(255)
     tags?: string;
 
-    @IsInt()
-    usuarioId: number;  // ID do usuário
+    usuario: User
+
+    @IsOptional()
+    slug?: string; 
+
+    @IsOptional()
+    foto: string;
 }

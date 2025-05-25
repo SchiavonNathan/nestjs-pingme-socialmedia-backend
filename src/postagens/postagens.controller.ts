@@ -22,120 +22,49 @@ export class PostagensController {
     @Public()
     @Get()
     getPostagensList() {
-        return this.postagemRepository.find({ relations: ["usuario"] });
+        return this.postagensService.findAll();
     }
 
     @Public()
     @Get(":id")
     async getPostagemById(@Param("id") id: number) {
-        const postagem = await this.postagemRepository.findOne({ where: { id }, relations: ["usuario"] });
-        if (!postagem) {
-            throw new NotFoundException("Postagem não encontrada");
-        }
-        return postagem;
+        return this.postagensService.getPostagensById(id);
     }
 
     @Public()
     @Get("/usuario/:userId")
     async getPostagensByUserId(@Param("userId") userId: number) {
-        const usuario = await this.userRepository.findOne({ where: { id: userId } });
-        
-        if (!usuario) {
-            throw new NotFoundException("Usuário não encontrado");
-        }
-
-        const postagens = await this.postagemRepository.find({
-            where: { usuario: { id: userId } },
-            relations: ["usuario"],
-        });
-
-        return postagens;
+        return this.postagensService.getPostagensByUserId(userId);
     }
 
     @Public()
     @Get("/search/:titulo")
     async getPostagemByTitulo(@Param("titulo") titulo: string) {
-        const postagem = await this.postagemRepository.find({ where: { titulo: Like(`%${titulo}%`) },  relations: ["usuario"]});
-        if (!postagem) {
-            throw new NotFoundException("Postagem não encontrada");
-        }
-        return postagem;
+        return this.postagensService.getPostagemByTitulo(titulo);
     }
 
-    //rota para compartilhamento
     @Public()
     @Get("/share/:id")
     async getPostagemForShare(@Param("id") id:number){
-        const postagem = await this.postagemRepository.findOne({where: {id}, relations: ["usuario"] });
-        if (!postagem){
-            throw new NotFoundException("Postagem não encontrada");
-        }
-
-        //gerar slug com base no título
-        const slug = slugify(postagem.titulo, { lower: true});
-        const shareUrl = `https://blog.com/postagens/${id}/${slug}`;
-
-        return { shareUrl };
+        return this.postagensService.getPostagemForShare(id);
     }
 
     @Public()
     @Post()
     async createPostagem(@Body() postagemDto: PostagemDTO) {
-        const usuario = await this.userRepository.findOneBy({ id: postagemDto.usuarioId });
-        
-        if (!usuario) {
-            throw new NotFoundException("Usuário não encontrado");
-        }
-
-        const postagem = this.postagemRepository.create({
-            ...postagemDto,
-            usuario,
-            slug: slugify(postagemDto.titulo, { lower: true }),
-        });
-
-        return this.postagemRepository.save(postagem);
+        return this.postagensService.create(postagemDto);
     }
 
     @Public()
     @Put(":id")
     async updatePostagem(@Param("id") id: number, @Body() postagemDto: PostagemDTO) {
-        const postagem = await this.postagemRepository.findOne({ where: { id }, relations: ["usuario"] });
-        if (!postagem) {
-            throw new NotFoundException("Postagem não encontrada");
-        }
-
-        const usuario = await this.userRepository.findOneBy({ id: postagemDto.usuarioId });
-        
-        if (!usuario) {
-            throw new NotFoundException("Usuário não encontrado");
-        }
-
-        this.postagemRepository.merge(postagem, postagemDto);
-        postagem.usuario = usuario;
-
-        return this.postagemRepository.save(postagem);
+        return this.postagensService.update(id, postagemDto);
     }
 
     @Public()
     @Delete(":id")
     async deletePostagemById(@Param("id") id: number) {
-        const postagem = await this.postagemRepository.findOneBy({ id });
-        if (!postagem) {
-            throw new NotFoundException("Postagem não encontrada");
-        }
-        await this.postagemRepository.delete(id);
+        return this.postagensService.deletePostagemById(id);
     }
-
-    // @Public()
-    // @Post(":postId/like/:userId")
-    // async toggleLike(
-    //     @Param("postId") postId: number,
-    //     @Param("userId") userId: number,
-    // ) {
-    //     const result = await this.postagensService.toggleLike(postId, userId);
-    //     return result;
-    // }
-
-    
 
 }
