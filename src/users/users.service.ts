@@ -16,11 +16,11 @@ export class UsersService {
     return this.usersRepository.find();
   }
 
-  async findOneByEmail(email: string): Promise<User | undefined> {
+  async findOneByEmail(email: string): Promise<User> {
     return this.usersRepository.findOne({ where: { email } });
   }
 
-  async findOneById(id: number): Promise<User | undefined> {
+  async findOneById(id: number): Promise<User> {
     const user = await this.usersRepository.findOneBy({ id });
     if (!user) {
       throw new NotFoundException("Usuário não encontrado");
@@ -39,7 +39,6 @@ export class UsersService {
     newUser.name = user.name;
     newUser.email = user.email;
     newUser.password = user.password;
-    newUser.isActive = user.isActive;
     
     return this.usersRepository.save(newUser);
   }

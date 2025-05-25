@@ -10,8 +10,4 @@ export class UserDTO {
 
     @IsNotEmpty()
     password: string
-
-    @IsNotEmpty()
-    @IsBoolean()
-    isActive: boolean
 }
