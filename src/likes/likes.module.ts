@@ -7,12 +7,13 @@ import { PostagensController } from 'src/postagens/postagens.controller';
 import { User } from 'src/users/users.entity';
 import { PostagensService } from 'src/postagens/postagens.service'; // Importar o PostagensService
 import { UsersService } from 'src/users/users.service'; // Importar o UserService
+import { LikesService } from './likes.service';
 
 @Module({
     imports: [
-        TypeOrmModule.forFeature([Like, Postagem, User]), // Importar as entidades
+        TypeOrmModule.forFeature([Like, Postagem, User]), 
     ],
-    controllers: [LikesController, PostagensController], // Controladores que serão utilizados
-    providers: [PostagensService, UsersService], // Incluir os serviços que são necessários para os controladores
+    controllers: [LikesController, PostagensController], 
+    providers: [PostagensService, UsersService, LikesService], 
 })
 export class LikesModule {}
