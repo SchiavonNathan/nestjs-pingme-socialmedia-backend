@@ -1,13 +1,8 @@
-import { Body, Controller, Delete, Get, NotFoundException, Param, Post, Put } from "@nestjs/common";
-import { Repository } from "typeorm";
-import { Postagem } from "./postagens.entity";
-import { InjectRepository } from "@nestjs/typeorm";
+import { Body, Controller, Delete, Get, Param, Post, Put } from "@nestjs/common";
 import { PostagemDTO } from "./DTO/postagens.dto";
 import { Public } from "src/auth/constants";
-import { User } from "src/users/users.entity";
 import { PostagensService } from "./postagens.service";
-import slugify from "slugify";
-import { Like } from "typeorm";
+
 
 @Controller("postagens")
 export class PostagensController {

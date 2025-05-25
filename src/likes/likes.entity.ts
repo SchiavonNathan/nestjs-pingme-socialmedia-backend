@@ -3,7 +3,7 @@ import { User } from 'src/users/users.entity';
 import { Postagem } from 'src/postagens/postagens.entity';
 
 @Entity()
-@Unique(['postagem', 'usuario'])  // Garantir que a combinação postagem-usuario seja única
+@Unique(['postagem', 'usuario'])
 export class Like {
     @PrimaryGeneratedColumn()
     id: number;
