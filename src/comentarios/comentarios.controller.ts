@@ -1,70 +1,36 @@
-import {  Body, Controller, Delete, Get, NotFoundException, Param, Post, Put } from '@nestjs/common';
-import { Repository } from "typeorm";
-import { Postagem } from "../postagens/postagens.entity";
-import { InjectRepository } from "@nestjs/typeorm";
+import { Body, Controller, Delete, Get, Param, Post } from '@nestjs/common';
 import { ComentarioDTO } from "../comentarios/DTO/comentarios.dto";
 import { Public } from "src/auth/constants";
-import { User } from "src/users/users.entity";
-import { Comentario } from './comentarios.entity';
+import { ComentariosService } from './comentarios.service';
+
 
 @Controller('comentarios')
 export class ComentariosController {
     constructor(
-        @InjectRepository(Postagem)
-        private postagemRepository: Repository<Postagem>,
-        @InjectRepository(User)
-        private userRepository: Repository<User>,
-        @InjectRepository(Comentario)
-        private comentarioRepository: Repository<Comentario>,
+        private readonly comentarioService: ComentariosService,
     ) {}
 
     @Public()
     @Get()
-    getComentariosList(){
-        return this.comentarioRepository.find({ relations: ["usuario", "postagem"] });
+    async getComentariosList(){
+        return await this.comentarioService.getComentariosList();
     }
 
     @Public()
     @Get(":postagem_id")
     async getComentarioById(@Param("postagem_id") postagem_id: number) {
-    
-        if (isNaN(postagem_id)) {
-            throw new NotFoundException("O ID da postagem deve ser um número válido.");
-        }
-
-        const comentarios = await this.comentarioRepository.find({
-            where: { postagem: { id: postagem_id } },
-            relations: ["usuario", "postagem"],
-        });
-    
-        return comentarios;
+        return await this.comentarioService.getComentarioById(postagem_id);
     }
 
     @Public()
     @Post()
     async createComentario(@Body() comentarioDTO: ComentarioDTO){
-        const usuario = await this.userRepository.findOneBy({ id: comentarioDTO.usuarioId });
-        const postagem = await this.postagemRepository.findOneBy({ id: comentarioDTO.postagemId });
-        
-        if (!usuario) {
-            throw new NotFoundException("Usuário não encontrado");
-        }
-        if (!postagem) {
-            throw new NotFoundException("Postagem não encontrado");
-        }
-
-        const comentario = this.comentarioRepository.create({
-            ...comentarioDTO,
-            usuario,
-            postagem
-        });
-
-        return this.comentarioRepository.save(comentario);
+        return await this.comentarioService.createComentario(comentarioDTO);
     }
 
     @Public()
     @Delete(":id")
     async deletarComentario(@Param("id") id: number){
-        return await this.comentarioRepository.delete({id: id})
+        return await this.comentarioService.deleteComentario(id);
     }
 }
