@@ -19,32 +19,32 @@ export class UsersController {
 
     @Public()
     @Get()
-    getUsersList() {
-        return this.usersService.findAll();
+    async getUsersList() {
+        return await this.usersService.findAll();
     }
 
     @Public()
     @Get(":id")
     async getUserById(@Param("id") id: number) {
-        return this.usersService.findOneById(id);
+        return await this.usersService.findOneById(id);
     }
 
     @Public()
     @Post()
-    createUser(@Body() userDto: UserDTO) {
-        return this.usersService.create(userDto);
+    async createUser(@Body() userDto: UserDTO) {
+        return await this.usersService.create(userDto);
     }
     
     @Public()
     @Put(':id') 
     async updateUser(@Param('id') id: number, @Body() updateUserDto: UpdateUserDTO) {
-        return this.usersService.update(id, updateUserDto);
+        return await this.usersService.update(id, updateUserDto);
     }
 
 
     @Delete(":id")
     async deleteUserById(@Param("id") id: number) {
-        return this.usersService.delete(id);
+        return await this.usersService.delete(id);
     }
 
     @Public()
