@@ -12,59 +12,55 @@ import { Like } from "typeorm";
 @Controller("postagens")
 export class PostagensController {
     constructor(
-        @InjectRepository(Postagem)
-        private postagemRepository: Repository<Postagem>,
-        @InjectRepository(User)
-        private userRepository: Repository<User>,
         private postagensService: PostagensService,
     ) { }
 
     @Public()
     @Get()
-    getPostagensList() {
-        return this.postagensService.findAll();
+    async getPostagensList() {
+        return await this.postagensService.findAll();
     }
 
     @Public()
     @Get(":id")
     async getPostagemById(@Param("id") id: number) {
-        return this.postagensService.getPostagensById(id);
+        return await this.postagensService.getPostagensById(id);
     }
 
     @Public()
     @Get("/usuario/:userId")
     async getPostagensByUserId(@Param("userId") userId: number) {
-        return this.postagensService.getPostagensByUserId(userId);
+        return await this.postagensService.getPostagensByUserId(userId);
     }
 
     @Public()
     @Get("/search/:titulo")
     async getPostagemByTitulo(@Param("titulo") titulo: string) {
-        return this.postagensService.getPostagemByTitulo(titulo);
+        return await this.postagensService.getPostagemByTitulo(titulo);
     }
 
     @Public()
     @Get("/share/:id")
     async getPostagemForShare(@Param("id") id:number){
-        return this.postagensService.getPostagemForShare(id);
+        return await this.postagensService.getPostagemForShare(id);
     }
 
     @Public()
     @Post()
     async createPostagem(@Body() postagemDto: PostagemDTO) {
-        return this.postagensService.create(postagemDto);
+        return await this.postagensService.create(postagemDto);
     }
 
     @Public()
     @Put(":id")
     async updatePostagem(@Param("id") id: number, @Body() postagemDto: PostagemDTO) {
-        return this.postagensService.update(id, postagemDto);
+        return await this.postagensService.update(id, postagemDto);
     }
 
     @Public()
     @Delete(":id")
     async deletePostagemById(@Param("id") id: number) {
-        return this.postagensService.deletePostagemById(id);
+        return await this.postagensService.deletePostagemById(id);
     }
 
 }
